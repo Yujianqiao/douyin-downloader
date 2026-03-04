@@ -1,0 +1,73 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* 全局样式 */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+  background-color: #F5F5F5;
+  color: #161823;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* 滚动条样式 */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #d1d1d1;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #b1b1b1;
+}
+
+/* 选中文字样式 */
+::selection {
+  background-color: rgba(254, 44, 85, 0.2);
+}
+
+/* 按钮基础样式 */
+.btn-primary {
+  @apply bg-douyin-red text-white px-4 py-2 rounded-douyin font-medium transition-all duration-200;
+}
+
+.btn-primary:hover {
+  @apply bg-douyin-red-hover shadow-lg;
+}
+
+.btn-primary:active {
+  @apply transform scale-95;
+}
+
+.btn-secondary {
+  @apply bg-bg-secondary text-text-primary px-4 py-2 rounded-douyin font-medium transition-all duration-200;
+}
+
+.btn-secondary:hover {
+  @apply bg-gray-200;
+}
+
+/* 输入框基础样式 */
+.input-douyin {
+  @apply w-full px-4 py-3 border border-gray-200 rounded-douyin focus:outline-none focus:border-douyin-red focus:ring-2 focus:ring-douyin-red/20 transition-all duration-200;
+}
+
+/* 卡片基础样式 */
+.card-douyin {
+  @apply bg-white rounded-douyin shadow-sm border border-gray-100;
+}
