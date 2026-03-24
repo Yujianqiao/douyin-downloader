@@ -1,0 +1,22 @@
+[package]
+name = "douyin-downloader"
+version = "0.1.0"
+description = "抖音视频下载工具 - AI 去字幕版"
+authors = ["Yujianqiao"]
+license = "MIT"
+repository = "https://github.com/Yujianqiao/douyin-downloader"
+edition = "2021"
+rust-version = "1.70"
+
+[build-dependencies]
+tauri-build = { version = "1.5", features = [] }
+
+[dependencies]
+tauri = { version = "1.5", features = ["shell-open", "dialog-open", "dialog-save", "fs-all", "path-all", "event-all"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+tokio = { version = "1.0", features = ["full"] }
+
+[features]
+default = ["custom-protocol"]
+custom-protocol = ["tauri/custom-protocol"]
