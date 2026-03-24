@@ -1,5 +1,5 @@
 //! Douyin Downloader - Tauri 主入口
-//! 
+//!
 //! 功能：
 //! - 视频下载
 //! - 字幕去除（AI 功能）
@@ -11,7 +11,9 @@
 )]
 
 mod commands;
+mod models;
 
+use commands::*;
 use commands::subtitle::*;
 use tauri::Manager;
 
@@ -19,6 +21,11 @@ fn main() {
     tauri::Builder::default()
         .manage(ProcessingState::default())
         .invoke_handler(tauri::generate_handler![
+            // 视频下载命令
+            parse_link,
+            download_video,
+            get_download_progress,
+            cancel_download,
             // 字幕去除命令
             detect_subtitle_area,
             remove_subtitles,

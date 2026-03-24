@@ -1,6 +1,6 @@
 [package]
 name = "douyin-downloader"
-version = "0.1.0"
+version = "1.0.0"
 description = "抖音视频下载工具 - AI 去字幕版"
 authors = ["Yujianqiao"]
 license = "MIT"
@@ -9,13 +9,19 @@ edition = "2021"
 rust-version = "1.70"
 
 [build-dependencies]
-tauri-build = { version = "1.5", features = [] }
+tauri-build = { version = "2", features = [] }
 
 [dependencies]
-tauri = { version = "1.5", features = ["shell-open", "dialog-open", "dialog-save", "fs-all", "path-all", "event-all"] }
+tauri = { version = "2", features = [] }
+tauri-plugin-shell = "2"
+tauri-plugin-dialog = "2"
+tauri-plugin-fs = "2"
+tauri-plugin-notification = "2"
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 tokio = { version = "1.0", features = ["full"] }
+lazy_static = "1.4.0"
+log = "0.4"
 
 [features]
 default = ["custom-protocol"]
