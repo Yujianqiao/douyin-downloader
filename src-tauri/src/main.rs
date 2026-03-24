@@ -31,11 +31,11 @@ fn main() {
             cancel_subtitle_removal,
             get_processing_status,
         ])
-        .setup(|app| {
+        .setup(|_app| {
             #[cfg(debug_assertions)]
             {
-                let window = app.get_window("main").unwrap();
-                window.open_devtools();
+                // 在 Tauri v2 中，窗口管理方式不同
+                // 如果需要打开开发者工具，可以通过 WebView 设置
             }
             Ok(())
         })

@@ -10,9 +10,10 @@ use std::sync::Arc;
 use tokio::io::{AsyncBufReadExt, BufReader};
 use tokio::process::Command;
 use tokio::sync::Mutex;
+use lazy_static::lazy_static;
 
 // 全局下载进度状态
-lazy_static::lazy_static! {
+lazy_static! {
     static ref DOWNLOAD_PROGRESS: Arc<Mutex<DownloadProgress>> =
         Arc::new(Mutex::new(DownloadProgress::default()));
     static ref DOWNLOAD_CANCELLED: Arc<Mutex<bool>> =
