@@ -15,7 +15,6 @@ mod models;
 
 use commands::*;
 use commands::subtitle::*;
-use tauri::Manager;
 
 fn main() {
     tauri::Builder::default()
