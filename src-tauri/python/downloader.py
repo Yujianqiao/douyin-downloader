@@ -72,22 +72,36 @@ def parse_douyin_url(url: str) -> Optional[str]:
     # 清理URL（移除跟踪参数）
     url = url.strip()
     
+    # 移除常见的分享文案前缀
+    url = re.sub(r'^.*?http', 'http', url)
+    url = re.sub(r'\s+.*$', '', url)  # 移除URL后的空格和文字
+    
     # 抖音短链接
     if 'v.douyin.com' in url:
+        # 清理短链接，只保留核心部分
+        match = re.search(r'v\.douyin\.com/[\w]+', url)
+        if match:
+            return f"https://{match.group(0)}"
         return url
     
     # 抖音网页版链接
     if 'www.douyin.com' in url or 'douyin.com/video/' in url:
+        # 提取视频ID
+        match = re.search(r'douyin\.com/video/(\d+)', url)
+        if match:
+            return f"https://www.douyin.com/video/{match.group(1)}"
         return url
     
     # 抖音分享链接（包含中文描述的情况）
     # 尝试提取 http:// 或 https:// 开头的URL
-    url_pattern = r'https?://[^\s]+'
+    url_pattern = r'https?://[^\s<>"]+'
     matches = re.findall(url_pattern, url)
     if matches:
         for match in matches:
-            if 'douyin' in match:
-                return match
+            if 'douyin' in match.lower():
+                # 清理URL
+                clean_url = match.split('?')[0] if '?' in match else match
+                return clean_url
     
     return None
 

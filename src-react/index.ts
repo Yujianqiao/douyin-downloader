@@ -4,6 +4,7 @@
 
 export { SubtitleRemover } from './components/SubtitleRemover';
 export { DownloadWithSubtitleRemoval } from './components/DownloadWithSubtitleRemoval';
+export { DownloadWithOptions } from './components/DownloadWithOptions';
 export { useSubtitleRemover } from './hooks/useSubtitleRemover';
 export type {
   ProgressPayload,
