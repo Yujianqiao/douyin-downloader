@@ -5,7 +5,7 @@ use serde::{Deserialize, Serialize};
 use std::path::PathBuf;
 use std::process::Command;
 use std::sync::Mutex;
-use tauri::{AppHandle, Manager, State};
+use tauri::{AppHandle, State};
 
 /// 处理进度信息
 #[derive(Clone, Serialize)]
@@ -61,7 +61,7 @@ pub async fn detect_subtitle_area(
     video_path: String,
     app: AppHandle,
 ) -> Result<Option<SubtitleArea>, String> {
-    let python_script = include_str!(concat!(env!("CARGO_MANIFEST_DIR"), "/../src-python/subtitle_detector.py"));
+    let python_script = include_str!(concat!(env!("CARGO_MANIFEST_DIR"), "/../src-python/subtitle_remover.py"));
     
     // 创建临时脚本文件
     let temp_dir = std::env::temp_dir();
@@ -131,7 +131,7 @@ pub async fn remove_subtitles(
     }
     
     // 发送开始事件
-    app.emit_all("subtitle:started", ())
+    app.emit("subtitle:started", ())
         .map_err(|e| format!("Failed to emit event: {}", e))?;
     
     // 构建 Python 命令
@@ -163,7 +163,7 @@ pub async fn remove_subtitles(
         Ok(output) => {
             if output.status.success() {
                 // 发送完成事件
-                let _ = app.emit_all("subtitle:completed", ProgressPayload {
+                let _ = app.emit("subtitle:completed", ProgressPayload {
                     percent: 100.0,
                     current_frame: 0,
                     total_frames: 0,
@@ -177,7 +177,7 @@ pub async fn remove_subtitles(
                 })
             } else {
                 let stderr = String::from_utf8_lossy(&output.stderr);
-                let _ = app.emit_all("subtitle:error", stderr.to_string());
+                let _ = app.emit("subtitle:error", stderr.to_string());
                 
                 Ok(RemoveSubtitleResponse {
                     success: false,
@@ -187,7 +187,7 @@ pub async fn remove_subtitles(
             }
         }
         Err(e) => {
-            let _ = app.emit_all("subtitle:error", e.to_string());
+            let _ = app.emit("subtitle:error", e.to_string());
             
             Ok(RemoveSubtitleResponse {
                 success: false,
