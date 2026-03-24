@@ -27,11 +27,8 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Install Tauri CLI
-        run: cargo install tauri-cli
-
       - name: Build Tauri app
-        run: cargo tauri build
+        run: npm run tauri build
 
       - name: Upload NSIS to Release
         uses: softprops/action-gh-release@v1
