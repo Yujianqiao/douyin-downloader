@@ -5,7 +5,7 @@ use serde::{Deserialize, Serialize};
 use std::path::PathBuf;
 use std::process::Command;
 use std::sync::Mutex;
-use tauri::{AppHandle, State};
+use tauri::{AppHandle, Emitter, State};
 
 /// 处理进度信息
 #[derive(Clone, Serialize)]
@@ -59,7 +59,7 @@ impl Default for ProcessingState {
 #[tauri::command]
 pub async fn detect_subtitle_area(
     video_path: String,
-    app: AppHandle,
+    _app: AppHandle,
 ) -> Result<Option<SubtitleArea>, String> {
     let python_script = include_str!(concat!(env!("CARGO_MANIFEST_DIR"), "/../src-python/subtitle_remover.py"));
     
