@@ -14,11 +14,10 @@ mod commands;
 mod models;
 
 use commands::*;
-use commands::subtitle::*;
 
 fn main() {
     tauri::Builder::default()
-        .manage(ProcessingState::default())
+        .manage(commands::subtitle::ProcessingState::default())
         .invoke_handler(tauri::generate_handler![
             // 视频下载命令
             parse_link,
@@ -31,14 +30,6 @@ fn main() {
             cancel_subtitle_removal,
             get_processing_status,
         ])
-        .setup(|_app| {
-            #[cfg(debug_assertions)]
-            {
-                // 在 Tauri v2 中，窗口管理方式不同
-                // 如果需要打开开发者工具，可以通过 WebView 设置
-            }
-            Ok(())
-        })
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
