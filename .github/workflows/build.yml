@@ -33,19 +33,6 @@ jobs:
       - name: Build Tauri app
         run: cargo tauri build
 
-      - name: Upload MSI to Release
-        uses: softprops/action-gh-release@v1
-        with:
-          files: src-tauri/target/release/bundle/msi/*.msi
-          tag_name: v1.0.0
-          name: "抖音视频下载器 v1.0.0"
-          body: "Windows 安装包 (MSI)"
-          draft: false
-          prerelease: false
-          make_latest: true
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Upload NSIS to Release
         uses: softprops/action-gh-release@v1
         with:
