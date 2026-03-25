@@ -27,6 +27,8 @@ pub struct DownloadOptions {
     pub format_id: Option<String>,
     pub output_path: Option<String>,
     pub filename: Option<String>,
+    pub remove_watermark: Option<bool>,
+    pub remove_subtitle: Option<bool>,
 }
 
 /// 下载进度

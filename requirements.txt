@@ -1,3 +1,7 @@
+# 抖音视频下载器依赖
+yt-dlp>=2024.1.0
+requests>=2.31.0
+
 # AI 视频去字幕功能依赖
 opencv-python-headless>=4.8.0
 numpy>=1.24.0

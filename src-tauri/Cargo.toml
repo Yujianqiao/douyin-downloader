@@ -1,6 +1,6 @@
 [package]
 name = "douyin-downloader"
-version = "1.0.0"
+version = "1.1.0"
 description = "抖音视频下载工具 - AI 去字幕版"
 authors = ["Yujianqiao"]
 license = "MIT"

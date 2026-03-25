@@ -63,7 +63,7 @@ export const Layout: React.FC<LayoutProps> = ({ children, currentPage, onPageCha
         {/* 底部信息 */}
         <div className="p-4 border-t border-gray-100">
           <p className="text-xs text-text-tertiary text-center">
-            版本 0.1.0
+            版本 1.1.0
           </p>
         </div>
       </aside>

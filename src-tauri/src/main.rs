@@ -24,6 +24,9 @@ fn main() {
             download_video,
             get_download_progress,
             cancel_download,
+            // 文件操作命令
+            open_video_file,
+            open_file_folder,
             // 字幕去除命令
             detect_subtitle_area,
             remove_subtitles,

@@ -120,3 +120,29 @@ export function formatDuration(seconds?: number): string {
 export function generateId(): string {
   return `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
 }
+
+/**
+ * 使用系统默认播放器打开视频文件
+ * @param filePath 视频文件路径
+ */
+export async function openVideoFile(filePath: string): Promise<void> {
+  try {
+    await invoke('open_video_file', { filePath });
+  } catch (error) {
+    console.error('打开视频文件失败:', error);
+    throw error;
+  }
+}
+
+/**
+ * 打开文件所在文件夹
+ * @param filePath 文件路径
+ */
+export async function openFileFolder(filePath: string): Promise<void> {
+  try {
+    await invoke('open_file_folder', { filePath });
+  } catch (error) {
+    console.error('打开文件夹失败:', error);
+    throw error;
+  }
+}

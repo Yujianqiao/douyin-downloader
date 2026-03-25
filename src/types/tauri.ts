@@ -27,6 +27,8 @@ export interface DownloadOptions {
   format_id?: string;
   output_path?: string;
   filename?: string;
+  remove_watermark?: boolean;
+  remove_subtitle?: boolean;
 }
 
 // 下载进度
@@ -63,6 +65,12 @@ export interface DownloadTask {
   progress: DownloadProgress;
   createdAt: number;
   completedAt?: number;
+  processing?: {
+    remove_watermark: boolean;
+    remove_subtitle: boolean;
+    status: 'pending' | 'processing' | 'completed' | 'error';
+    progress?: number;
+  };
 }
 
 // 历史记录项

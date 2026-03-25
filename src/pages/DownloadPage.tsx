@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import { Link2, Loader2, Download, FolderOpen, Check, AlertCircle } from 'lucide-react';
+import { Link2, Loader2, Download, FolderOpen, Check, AlertCircle, Droplets, Type } from 'lucide-react';
 import type { VideoInfo, VideoFormat, DownloadOptions } from '../types/tauri';
 import { parseLink, downloadVideo, formatFileSize, formatDuration, generateId } from '../utils/tauri';
 
@@ -20,6 +20,8 @@ export const DownloadPage: React.FC<DownloadPageProps> = ({ onDownloadStart, def
   const [outputPath, setOutputPath] = useState(defaultSettings.downloadPath);
   const [customFilename, setCustomFilename] = useState('');
   const [isDownloading, setIsDownloading] = useState(false);
+  const [removeWatermark, setRemoveWatermark] = useState(false);
+  const [removeSubtitle, setRemoveSubtitle] = useState(false);
 
   // 处理粘贴事件
   const handlePaste = useCallback(async (e: ClipboardEvent) => {
@@ -75,6 +77,8 @@ export const DownloadPage: React.FC<DownloadPageProps> = ({ onDownloadStart, def
       format_id: selectedFormat,
       output_path: outputPath,
       filename: customFilename || '%(title)s.%(ext)s',
+      remove_watermark: removeWatermark,
+      remove_subtitle: removeSubtitle,
     };
 
     // 创建任务对象
@@ -260,6 +264,59 @@ export const DownloadPage: React.FC<DownloadPageProps> = ({ onDownloadStart, def
               <p className="text-xs text-text-tertiary mt-1">
                 支持变量：%(title)s - 视频标题, %(author)s - 作者名, %(ext)s - 扩展名
               </p>
+            </div>
+
+            {/* 功能开关 */}
+            <div className="grid grid-cols-2 gap-4">
+              {/* 去水印开关 */}
+              <button
+                onClick={() => setRemoveWatermark(!removeWatermark)}
+                className={`p-4 border rounded-douyin flex items-center gap-3 transition-all duration-200 ${
+                  removeWatermark
+                    ? 'border-douyin-red bg-douyin-red/5'
+                    : 'border-gray-200 hover:border-gray-300'
+                }`}
+              >
+                <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
+                  removeWatermark ? 'bg-douyin-red text-white' : 'bg-gray-100 text-gray-500'
+                }`}>
+                  <Droplets className="w-5 h-5" />
+                </div>
+                <div className="text-left">
+                  <div className="font-medium text-text-primary">去水印</div>
+                  <div className="text-xs text-text-tertiary">自动去除视频水印</div>
+                </div>
+                <div className={`ml-auto w-5 h-5 rounded-full border-2 flex items-center justify-center ${
+                  removeWatermark ? 'border-douyin-red bg-douyin-red' : 'border-gray-300'
+                }`}>
+                  {removeWatermark && <Check className="w-3 h-3 text-white" />}
+                </div>
+              </button>
+
+              {/* 去字幕开关 */}
+              <button
+                onClick={() => setRemoveSubtitle(!removeSubtitle)}
+                className={`p-4 border rounded-douyin flex items-center gap-3 transition-all duration-200 ${
+                  removeSubtitle
+                    ? 'border-douyin-red bg-douyin-red/5'
+                    : 'border-gray-200 hover:border-gray-300'
+                }`}
+              >
+                <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
+                  removeSubtitle ? 'bg-douyin-red text-white' : 'bg-gray-100 text-gray-500'
+                }`}>
+                  <Type className="w-5 h-5" />
+                </div>
+                <div className="text-left">
+                  <div className="font-medium text-text-primary">去字幕</div>
+                  <div className="text-xs text-text-tertiary">AI 智能去除字幕</div>
+                </div>
+                <div className={`ml-auto w-5 h-5 rounded-full border-2 flex items-center justify-center ${
+                  removeSubtitle ? 'border-douyin-red bg-douyin-red' : 'border-gray-300'
+                }`}>
+                  {removeSubtitle && <Check className="w-3 h-3 text-white" />}
+                </div>
+              </button>
             </div>
 
             {/* 立即下载按钮 */}

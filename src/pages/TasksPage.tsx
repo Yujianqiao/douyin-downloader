@@ -8,6 +8,8 @@ import {
   Loader2,
   Clock,
   MoreHorizontal,
+  Type,
+  Sparkles,
 } from 'lucide-react';
 import type { DownloadTask, DownloadProgress } from '../types/tauri';
 import { getDownloadProgress, cancelDownload, formatFileSize, formatDuration } from '../utils/tauri';
@@ -17,6 +19,7 @@ interface TasksPageProps {
   onTaskUpdate: (taskId: string, updates: Partial<DownloadTask>) => void;
   onTaskRemove: (taskId: string) => void;
   onTaskRetry: (task: DownloadTask) => void;
+  onRemoveSubtitle?: (taskId: string) => void;
 }
 
 type TaskFilter = 'all' | 'downloading' | 'completed' | 'error';
@@ -26,6 +29,7 @@ export const TasksPage: React.FC<TasksPageProps> = ({
   onTaskUpdate,
   onTaskRemove,
   onTaskRetry,
+  onRemoveSubtitle,
 }) => {
   const [filter, setFilter] = useState<TaskFilter>('all');
   const [selectedTasks, setSelectedTasks] = useState<Set<string>>(new Set());
@@ -266,6 +270,23 @@ export const TasksPage: React.FC<TasksPageProps> = ({
                         <p className="text-sm text-text-tertiary truncate">
                           {task.videoInfo?.author || '未知作者'} · {formatDuration(task.videoInfo?.duration)}
                         </p>
+                        {/* 处理选项标签 */}
+                        {(task.options.remove_watermark || task.options.remove_subtitle) && (
+                          <div className="flex items-center gap-2 mt-1">
+                            {task.options.remove_watermark && (
+                              <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-blue-50 text-blue-600 text-xs rounded">
+                                <Sparkles className="w-3 h-3" />
+                                去水印
+                              </span>
+                            )}
+                            {task.options.remove_subtitle && (
+                              <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-purple-50 text-purple-600 text-xs rounded">
+                                <Type className="w-3 h-3" />
+                                去字幕
+                              </span>
+                            )}
+                          </div>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -335,6 +356,16 @@ export const TasksPage: React.FC<TasksPageProps> = ({
                           title="重试"
                         >
                           <RotateCcw className="w-4 h-4" />
+                        </button>
+                      )}
+                      {/* 去字幕处理按钮 - 仅对已完成的任务显示 */}
+                      {task.progress.status === 'completed' && task.options.remove_subtitle && onRemoveSubtitle && (
+                        <button
+                          onClick={() => onRemoveSubtitle(task.id)}
+                          className="p-2 text-text-tertiary hover:text-purple-500 hover:bg-purple-50 rounded-lg transition-colors"
+                          title="去字幕处理"
+                        >
+                          <Type className="w-4 h-4" />
                         </button>
                       )}
                       <button

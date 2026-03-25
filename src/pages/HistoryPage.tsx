@@ -10,7 +10,7 @@ import {
   ChevronDown,
 } from 'lucide-react';
 import type { HistoryItem } from '../types/tauri';
-import { formatFileSize, formatDuration } from '../utils/tauri';
+import { formatFileSize, formatDuration, openVideoFile, openFileFolder } from '../utils/tauri';
 
 interface HistoryPageProps {
   history: HistoryItem[];
@@ -107,15 +107,23 @@ export const HistoryPage: React.FC<HistoryPageProps> = ({
   };
 
   // 处理播放
-  const handlePlay = (filePath: string) => {
-    // TODO: 调用 Tauri 打开视频文件
-    console.log('播放视频:', filePath);
+  const handlePlay = async (filePath: string) => {
+    try {
+      await openVideoFile(filePath);
+    } catch (error) {
+      console.error('播放视频失败:', error);
+      alert('无法打开视频文件，请检查文件是否存在');
+    }
   };
 
   // 处理打开文件夹
-  const handleOpenFolder = (filePath: string) => {
-    // TODO: 调用 Tauri 打开文件夹
-    console.log('打开文件夹:', filePath);
+  const handleOpenFolder = async (filePath: string) => {
+    try {
+      await openFileFolder(filePath);
+    } catch (error) {
+      console.error('打开文件夹失败:', error);
+      alert('无法打开文件夹');
+    }
   };
 
   // 处理选择
@@ -139,8 +147,9 @@ export const HistoryPage: React.FC<HistoryPageProps> = ({
 
   // 重新下载
   const handleRedownload = (item: HistoryItem) => {
-    // TODO: 跳转到下载页并填充链接
-    console.log('重新下载:', item.url);
+    // 触发自定义事件，通知 App 组件跳转到下载页并填充链接
+    const event = new CustomEvent('redownload', { detail: item });
+    window.dispatchEvent(event);
   };
 
   return (
