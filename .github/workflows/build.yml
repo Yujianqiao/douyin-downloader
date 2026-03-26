@@ -35,15 +35,15 @@ jobs:
         run: |
           Get-ChildItem -Path "src-tauri\target\release\bundle" -Recurse
 
-      - name: Upload to Release
+      - name: Upload to Release v1.1.1
         uses: softprops/action-gh-release@v1
         with:
           files: |
             src-tauri/target/release/bundle/**/*.exe
             src-tauri/target/release/bundle/**/*.msi
-          tag_name: v1.1.0
-          name: "抖音视频下载器 v1.1.0"
-          body: "新增AI视频去字幕功能"
+          tag_name: v1.1.1
+          name: "抖音视频下载器 v1.1.1"
+          body: "抖音视频下载器 v1.1.1 - 2026年3月26日构建"
           draft: false
           prerelease: false
           make_latest: true
