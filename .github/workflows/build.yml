@@ -38,7 +38,9 @@ jobs:
       - name: Upload to Release
         uses: softprops/action-gh-release@v1
         with:
-          files: src-tauri/target/release/bundle/nsis/*.exe
+          files: |
+            src-tauri/target/release/bundle/**/*.exe
+            src-tauri/target/release/bundle/**/*.msi
           tag_name: v1.1.0
           name: "抖音视频下载器 v1.1.0"
           body: "新增AI视频去字幕功能"
