@@ -1,6 +1,5 @@
 import React, { useState, useCallback } from 'react';
 import { Upload, Droplets, Type, Loader2, Check, AlertCircle, FileVideo } from 'lucide-react';
-import { open } from '@tauri-apps/api/dialog';
 import { invoke } from '@tauri-apps/api/core';
 
 interface LocalVideoPageProps {
@@ -19,29 +18,23 @@ export const LocalVideoPage: React.FC<LocalVideoPageProps> = ({ defaultSettings 
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
 
-  // 选择本地视频文件
-  const handleSelectFile = useCallback(async () => {
-    try {
-      const selected = await open({
-        multiple: false,
-        filters: [
-          {
-            name: '视频文件',
-            extensions: ['mp4', 'avi', 'mov', 'mkv', 'flv', 'wmv'],
-          },
-        ],
-      });
+  // 文件输入引用
+  const fileInputRef = React.useRef<HTMLInputElement>(null);
 
-      if (selected && typeof selected === 'string') {
-        setSelectedFile(selected);
-        setError(null);
-        setSuccess(false);
-      }
-    } catch (err) {
-      console.error('选择文件失败:', err);
-      setError('选择文件失败');
-    }
+  // 选择本地视频文件
+  const handleSelectFile = useCallback(() => {
+    fileInputRef.current?.click();
   }, []);
+
+  // 处理文件选择
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setSelectedFile(file.name);
+      setError(null);
+      setSuccess(false);
+    }
+  };
 
   // 处理视频
   const handleProcess = async () => {
@@ -102,6 +95,15 @@ export const LocalVideoPage: React.FC<LocalVideoPageProps> = ({ defaultSettings 
       {/* 文件选择 */}
       <div className="card-douyin p-6">
         <h4 className="text-base font-medium text-text-primary mb-4">选择视频文件</h4>
+        
+        {/* 隐藏的文件输入 */}
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept=".mp4,.avi,.mov,.mkv,.flv,.wmv"
+          onChange={handleFileChange}
+          style={{ display: 'none' }}
+        />
         
         <div className="flex gap-3">
           <input

@@ -447,3 +447,19 @@ pub async fn process_local_video(
         }))
     }
 }
+
+/// 选择本地文件
+#[tauri::command]
+pub async fn select_local_file(
+    filter_name: String,
+    extensions: Vec<String>,
+) -> Result<Option<String>, String> {
+    use tauri::api::dialog::FileDialogBuilder;
+    
+    // 由于异步限制，这里返回 None，实际使用前端 input 元素
+    // 或者使用 tauri::api::dialog 的同步版本
+    log::info!("选择文件: filter={}, extensions={:?}", filter_name, extensions);
+    
+    // 暂时返回 None，前端使用原生文件选择
+    Ok(None)
+}

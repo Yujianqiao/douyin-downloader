@@ -1,7 +1,7 @@
 import React from 'react';
 import { Download, Upload, ListTodo, History, Settings } from 'lucide-react';
 
-type Page = 'download' | 'tasks' | 'history' | 'settings';
+type Page = 'download' | 'local' | 'tasks' | 'history' | 'settings';
 
 interface LayoutProps {
   children: React.ReactNode;
