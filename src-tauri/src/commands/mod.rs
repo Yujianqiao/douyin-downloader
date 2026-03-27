@@ -372,3 +372,78 @@ async fn post_process_video(
         Err(format!("视频处理失败: {}", stderr))
     }
 }
+
+/// 处理本地视频文件（去水印/去字幕）
+#[tauri::command]
+pub async fn process_local_video(
+    input_path: String,
+    output_path: String,
+    remove_watermark: bool,
+    remove_subtitle: bool,
+) -> Result<serde_json::Value, String> {
+    log::info!("Processing local video: {}", input_path);
+    log::info!("Remove watermark: {}, Remove subtitle: {}", remove_watermark, remove_subtitle);
+
+    // 验证输入文件是否存在
+    if !std::path::Path::new(&input_path).exists() {
+        return Ok(serde_json::json!({
+            "success": false,
+            "error": "输入文件不存在"
+        }));
+    }
+
+    // 确保输出目录存在
+    let output_dir = std::path::Path::new(&output_path);
+    if !output_dir.exists() {
+        std::fs::create_dir_all(output_dir)
+            .map_err(|e| format!("创建输出目录失败: {}", e))?;
+    }
+
+    // 获取文件名
+    let input_file = std::path::Path::new(&input_path);
+    let file_name = input_file.file_stem()
+        .and_then(|s| s.to_str())
+        .unwrap_or("video");
+    let ext = input_file.extension()
+        .and_then(|s| s.to_str())
+        .unwrap_or("mp4");
+
+    // 生成输出文件路径
+    let output_file = format!("{}/{}_processed.{}", output_path, file_name, ext);
+
+    // 调用 Python 脚本进行处理
+    let mut args = vec![
+        "src-tauri/python/process_video.py".to_string(),
+        "--input".to_string(),
+        input_path.clone(),
+        "--output".to_string(),
+        output_file.clone(),
+    ];
+
+    if remove_watermark {
+        args.push("--remove-watermark".to_string());
+    }
+
+    if remove_subtitle {
+        args.push("--remove-subtitle".to_string());
+    }
+
+    let output = Command::new("python3")
+        .args(&args)
+        .output()
+        .await
+        .map_err(|e| format!("执行处理脚本失败: {}", e))?;
+
+    if output.status.success() {
+        Ok(serde_json::json!({
+            "success": true,
+            "output_path": output_file
+        }))
+    } else {
+        let stderr = String::from_utf8_lossy(&output.stderr);
+        Ok(serde_json::json!({
+            "success": false,
+            "error": format!("视频处理失败: {}", stderr)
+        }))
+    }
+}

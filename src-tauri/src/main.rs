@@ -27,6 +27,8 @@ fn main() {
             // 文件操作命令
             open_video_file,
             open_file_folder,
+            // 本地视频处理命令
+            process_local_video,
             // 字幕去除命令
             detect_subtitle_area,
             remove_subtitles,

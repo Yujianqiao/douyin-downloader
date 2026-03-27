@@ -4,6 +4,7 @@ import { DownloadPage } from './pages/DownloadPage';
 import { TasksPage } from './pages/TasksPage';
 import { HistoryPage } from './pages/HistoryPage';
 import { SettingsPage } from './pages/SettingsPage';
+import { LocalVideoPage } from './pages/LocalVideoPage';
 import type { DownloadTask, HistoryItem, AppSettings } from './types/tauri';
 
 // 默认设置
@@ -15,7 +16,7 @@ const defaultSettings: AppSettings = {
   namingRule: '%(title)s.%(ext)s',
 };
 
-type Page = 'download' | 'tasks' | 'history' | 'settings';
+type Page = 'download' | 'local' | 'tasks' | 'history' | 'settings';
 
 function App() {
   // 当前页面
@@ -180,6 +181,14 @@ function App() {
             defaultSettings={{
               downloadPath: settings.defaultDownloadPath,
               defaultQuality: settings.defaultQuality,
+            }}
+          />
+        );
+      case 'local':
+        return (
+          <LocalVideoPage
+            defaultSettings={{
+              downloadPath: settings.defaultDownloadPath,
             }}
           />
         );

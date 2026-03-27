@@ -1,5 +1,5 @@
 import React from 'react';
-import { Download, ListTodo, History, Settings } from 'lucide-react';
+import { Download, Upload, ListTodo, History, Settings } from 'lucide-react';
 
 type Page = 'download' | 'tasks' | 'history' | 'settings';
 
@@ -11,6 +11,7 @@ interface LayoutProps {
 
 const menuItems = [
   { id: 'download' as Page, label: '下载', icon: Download },
+  { id: 'local' as Page, label: '本地上传', icon: Upload },
   { id: 'tasks' as Page, label: '任务管理', icon: ListTodo },
   { id: 'history' as Page, label: '历史记录', icon: History },
   { id: 'settings' as Page, label: '设置', icon: Settings },
