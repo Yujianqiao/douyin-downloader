@@ -39,20 +39,50 @@ pub async fn parse_link(url: String) -> Result<ParseResult, String> {
         });
     }
 
-    // 调用Python脚本获取视频信息
-    let output = Command::new("python")
-        .arg("src-tauri/python/downloader.py")
-        .arg("info")
-        .arg(&url)
-        .output()
-        .await;
+    // 尝试多个 Python 路径
+    let python_paths = vec![
+        "python",
+        "python3",
+        r"C:\Python39\python.exe",
+        r"C:\Python310\python.exe",
+        r"C:\Python311\python.exe",
+        r"C:\Program Files\Python39\python.exe",
+        r"C:\Program Files\Python310\python.exe",
+        r"C:\Program Files\Python311\python.exe",
+        r"C:\Program Files (x86)\Python39\python.exe",
+        r"C:\Program Files (x86)\Python310\python.exe",
+        r"C:\Program Files (x86)\Python311\python.exe",
+        r"D:\Program Files (x86)\Python\python.exe",
+    ];
+
+    let mut output = None;
+    let mut last_error = String::new();
+
+    for python_path in &python_paths {
+        match Command::new(python_path)
+            .arg("src-tauri/python/downloader.py")
+            .arg("info")
+            .arg(&url)
+            .output()
+            .await
+        {
+            Ok(result) => {
+                output = Some(result);
+                break;
+            }
+            Err(e) => {
+                last_error = format!("{}: {}", python_path, e);
+                continue;
+            }
+        }
+    }
 
     let output = match output {
-        Ok(output) => output,
-        Err(e) => {
+        Some(output) => output,
+        None => {
             let error_msg = format!(
-                "无法执行Python脚本。请确保:\n1. Python已安装\n2. Python已添加到系统PATH\n3. 安装路径: D:\\Program Files (x86)\\Python\n\n错误详情: {}",
-                e
+                "无法找到 Python。请确保:\n1. Python已安装\n2. Python已添加到系统PATH\n3. 或安装在以下常见路径之一:\n   - C:\\Python39\\python.exe\n   - C:\\Program Files\\Python39\\python.exe\n   - C:\\Program Files (x86)\\Python39\\python.exe\n   - D:\\Program Files (x86)\\Python\\python.exe\n\n最后尝试的错误: {}",
+                last_error
             );
             return Ok(ParseResult {
                 success: false,

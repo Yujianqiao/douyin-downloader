@@ -104,12 +104,12 @@ export const LocalVideoPage: React.FC<LocalVideoPageProps> = ({ defaultSettings 
           style={{ display: 'none' }}
         />
         
-        <div className="flex gap-3">
+        <div className="flex gap-3 mb-3">
           <input
             type="text"
             value={selectedFile || ''}
-            readOnly
-            placeholder="点击右侧按钮选择视频文件..."
+            onChange={(e) => setSelectedFile(e.target.value)}
+            placeholder="输入完整文件路径，如: D:\\Videos\\video.mp4"
             className="input-douyin flex-1"
           />
           <button
@@ -118,9 +118,13 @@ export const LocalVideoPage: React.FC<LocalVideoPageProps> = ({ defaultSettings 
             className="btn-primary px-6 flex items-center gap-2 disabled:opacity-50"
           >
             <FileVideo className="w-4 h-4" />
-            选择文件
+            浏览
           </button>
         </div>
+        
+        <p className="text-xs text-text-tertiary">
+          提示：由于浏览器安全限制，无法自动获取完整路径。请手动输入完整路径或点击"浏览"选择文件。
+        </p>
 
         {selectedFile && (
           <div className="mt-4 p-4 bg-green-50 border border-green-200 rounded-douyin">
