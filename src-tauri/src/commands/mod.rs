@@ -40,7 +40,7 @@ pub async fn parse_link(url: String) -> Result<ParseResult, String> {
     }
 
     // 调用Python脚本获取视频信息
-    let output = Command::new("python3")
+    let output = Command::new("python")
         .arg("src-tauri/python/downloader.py")
         .arg("info")
         .arg(&url)
@@ -109,7 +109,7 @@ pub async fn download_video(
     std::fs::create_dir_all(&output_dir).map_err(|e| format!("创建下载目录失败: {}", e))?;
 
     // 构建下载命令
-    let mut cmd = Command::new("python3");
+    let mut cmd = Command::new("python");
     cmd.arg("src-tauri/python/downloader.py")
         .arg("download")
         .arg(&url)
@@ -428,7 +428,7 @@ pub async fn process_local_video(
         args.push("--remove-subtitle".to_string());
     }
 
-    let output = Command::new("python3")
+    let output = Command::new("python")
         .args(&args)
         .output()
         .await
