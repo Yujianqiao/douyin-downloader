@@ -45,15 +45,33 @@ pub async fn parse_link(url: String) -> Result<ParseResult, String> {
         .arg("info")
         .arg(&url)
         .output()
-        .await
-        .map_err(|e| format!("Failed to execute Python script: {}", e))?;
+        .await;
+
+    let output = match output {
+        Ok(output) => output,
+        Err(e) => {
+            let error_msg = format!(
+                "无法执行Python脚本。请确保:\n1. Python已安装\n2. Python已添加到系统PATH\n3. 安装路径: D:\\Program Files (x86)\\Python\n\n错误详情: {}",
+                e
+            );
+            return Ok(ParseResult {
+                success: false,
+                video_info: None,
+                error: Some(error_msg),
+            });
+        }
+    };
 
     if !output.status.success() {
         let stderr = String::from_utf8_lossy(&output.stderr);
+        let error_msg = format!(
+            "获取视频信息失败:\n{}\n\n可能原因:\n1. Python未正确安装\n2. 缺少必要的Python依赖\n3. 网络连接问题",
+            stderr
+        );
         return Ok(ParseResult {
             success: false,
             video_info: None,
-            error: Some(format!("获取视频信息失败: {}", stderr)),
+            error: Some(error_msg),
         });
     }
 
