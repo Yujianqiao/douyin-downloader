@@ -24,9 +24,17 @@ export const DownloadPage: React.FC<DownloadPageProps> = ({ onDownloadStart, def
   const [removeSubtitle, setRemoveSubtitle] = useState(false);
 
   // 处理粘贴事件
+  const lastPastedUrl = React.useRef<string>('');
+  
   const handlePaste = useCallback(async (e: ClipboardEvent) => {
     const pastedText = e.clipboardData?.getData('text');
     if (pastedText && (pastedText.includes('douyin.com') || pastedText.includes('iesdouyin.com'))) {
+      // 防止重复粘贴
+      if (pastedText === lastPastedUrl.current) {
+        return;
+      }
+      lastPastedUrl.current = pastedText;
+      
       setUrl(pastedText);
       // 自动触发解析
       setTimeout(() => handleParse(pastedText), 100);
