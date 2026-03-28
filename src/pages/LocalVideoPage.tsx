@@ -1,7 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import { Upload, Droplets, Type, Loader2, Check, AlertCircle, FileVideo } from 'lucide-react';
 import { invoke } from '@tauri-apps/api/core';
-import { open } from '@tauri-apps/plugin-dialog';
 
 interface LocalVideoPageProps {
   defaultSettings: {
@@ -19,27 +18,22 @@ export const LocalVideoPage: React.FC<LocalVideoPageProps> = ({ defaultSettings 
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
 
-  // 选择本地视频文件
-  const handleSelectFile = useCallback(async () => {
-    try {
-      const selected = await open({
-        multiple: false,
-        filters: [{
-          name: '视频文件',
-          extensions: ['mp4', 'avi', 'mov', 'mkv', 'flv', 'wmv']
-        }]
-      });
-      
-      if (selected && typeof selected === 'string') {
-        setSelectedFile(selected);
-        setError(null);
-        setSuccess(false);
-      }
-    } catch (err) {
-      console.error('选择文件失败:', err);
-      setError('选择文件失败: ' + (err instanceof Error ? err.message : String(err)));
-    }
+  // 选择本地视频文件（使用原生文件选择）
+  const fileInputRef = React.useRef<HTMLInputElement>(null);
+  
+  const handleSelectFile = useCallback(() => {
+    fileInputRef.current?.click();
   }, []);
+  
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      // 注意：浏览器无法获取完整路径，需要用户手动输入或使用其他方式
+      setSelectedFile(file.name);
+      setError(null);
+      setSuccess(false);
+    }
+  };
 
   // 处理视频
   const handleProcess = async () => {
