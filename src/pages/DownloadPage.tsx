@@ -8,6 +8,7 @@ interface DownloadPageProps {
   defaultSettings: {
     downloadPath: string;
     defaultQuality: string;
+    pythonPath?: string;
   };
 }
 
@@ -57,7 +58,7 @@ export const DownloadPage: React.FC<DownloadPageProps> = ({ onDownloadStart, def
     setVideoInfo(null);
 
     try {
-      const result = await parseLink(targetUrl.trim());
+      const result = await parseLink(targetUrl.trim(), defaultSettings.pythonPath);
       
       if (result.success && result.video_info) {
         setVideoInfo(result.video_info);

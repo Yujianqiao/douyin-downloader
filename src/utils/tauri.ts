@@ -9,11 +9,12 @@ import type {
 /**
  * 解析抖音链接，获取视频信息
  * @param url 抖音视频链接
+ * @param pythonPath Python 可执行文件路径（可选）
  * @returns 解析结果
  */
-export async function parseLink(url: string): Promise<ParseResult> {
+export async function parseLink(url: string, pythonPath?: string): Promise<ParseResult> {
   try {
-    const result = await invoke<ParseResult>('parse_link', { url });
+    const result = await invoke<ParseResult>('parse_link', { url, pythonPath });
     return result;
   } catch (error) {
     console.error('解析链接失败:', error);

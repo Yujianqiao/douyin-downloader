@@ -27,7 +27,7 @@ fn is_valid_douyin_url(url: &str) -> bool {
 
 /// 解析抖音链接，获取视频信息
 #[tauri::command]
-pub async fn parse_link(url: String) -> Result<ParseResult, String> {
+pub async fn parse_link(url: String, python_path: Option<String>) -> Result<ParseResult, String> {
     log::info!("Parsing URL: {}", url);
 
     // 验证URL格式
@@ -38,9 +38,20 @@ pub async fn parse_link(url: String) -> Result<ParseResult, String> {
             error: Some("无效的抖音链接格式".to_string()),
         });
     }
+    
+    // 使用用户配置的 Python 路径（如果提供）
+    let custom_python = python_path.unwrap_or_default();
 
-    // 尝试多个 Python 路径
-    let python_paths = vec![
+    // 尝试多个 Python 路径（优先使用用户配置的路径）
+    let mut python_paths: Vec<&str> = vec![];
+    
+    // 如果用户配置了 Python 路径，优先使用
+    if !custom_python.is_empty() {
+        python_paths.push(&custom_python);
+    }
+    
+    // 添加默认路径
+    python_paths.extend(vec![
         "python",
         "python3",
         r"C:\Python39\python.exe",
@@ -53,7 +64,7 @@ pub async fn parse_link(url: String) -> Result<ParseResult, String> {
         r"C:\Program Files (x86)\Python310\python.exe",
         r"C:\Program Files (x86)\Python311\python.exe",
         r"D:\Program Files (x86)\Python\python.exe",
-    ];
+    ]);
 
     let mut output = None;
     let mut last_error = String::new();

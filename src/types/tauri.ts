@@ -93,4 +93,5 @@ export interface AppSettings {
   maxConcurrentDownloads: number;
   enableNotifications: boolean;
   namingRule: string;
+  pythonPath?: string;  // Python 可执行文件路径
 }

@@ -322,6 +322,33 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({
         </div>
       </div>
 
+      {/* Python 路径设置 */}
+      <div className="card-douyin p-6">
+        <h3 className="text-lg font-semibold text-text-primary mb-6 flex items-center gap-2">
+          <HardDrive className="w-5 h-5 text-douyin-red" />
+          Python 路径设置
+        </h3>
+
+        <div className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-text-secondary mb-2">
+              Python 可执行文件路径
+            </label>
+            <input
+              type="text"
+              value={localSettings.pythonPath || ''}
+              onChange={(e) => handleChange('pythonPath', e.target.value)}
+              className="input-douyin w-full font-mono text-sm"
+              placeholder="D:\\Program Files (x86)\\Python\\python.exe"
+            />
+            <p className="text-xs text-text-tertiary mt-2">
+              如果视频下载提示"Python 未找到"，请手动指定 Python 可执行文件的完整路径。
+              例如：D:\\Program Files (x86)\\Python\\python.exe
+            </p>
+          </div>
+        </div>
+      </div>
+
       {/* 恢复默认 */}
       <div className="flex justify-end">
         <button

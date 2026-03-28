@@ -181,6 +181,7 @@ function App() {
             defaultSettings={{
               downloadPath: settings.defaultDownloadPath,
               defaultQuality: settings.defaultQuality,
+              pythonPath: settings.pythonPath,
             }}
           />
         );
